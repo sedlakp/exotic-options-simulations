@@ -1,7 +1,6 @@
 # Simulační výpočty exotických opcí
 ### (Valuation of Exotic Options via Simulations)
 
---
   
 Repo obsahuje kód pro simulování cen některých exotických opcí vyskytujících se v energetice. Vytvořeno v rámci mé diplomové práce (FEL ČVUT).  
 
