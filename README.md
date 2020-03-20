@@ -1,7 +1,7 @@
 # Simulační výpočty exotických opcí
 ### (Valuation of Exotic Options via Simulations)
 
-  
+
 Repo obsahuje kód pro simulování cen některých exotických opcí vyskytujících se v energetice. Vytvořeno v rámci mé diplomové práce (FEL ČVUT).  
 
 Jako programovací jazyk jsem zvolil Python. Pro psaní kódu používám Atom a Jupyter Notebook.
@@ -31,7 +31,7 @@ Jako programovací jazyk jsem zvolil Python. Pro psaní kódu používám Atom a
 
 ##### Exotické opce
 
-* [TODO] Mean reverting O-U simulace (Asijská opce - evropský typ)
+* Mean reverting O-U simulace (Asijská opce - evropský typ)
 	* Floating strike (Strike je průměr spotových cen, porovnává se s spotovou cenou v čase expirace opce)
 	* Fixed strike (Strike je fixní, porovnává se s průměrem spotových cen)
 * [TODO]
