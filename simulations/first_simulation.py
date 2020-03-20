@@ -17,6 +17,10 @@ def mean_reverting_european(s,x,*,positionFlag="c",
 
         plot with simulation paths is created as well
 
+        s - initial(current) price
+        x - strike
+        kappa - mean reversion strength
+        theta - long term average price to which the price reverts to
         v - volatility
         r - discount rate
     """
