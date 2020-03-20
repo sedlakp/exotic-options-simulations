@@ -1,7 +1,6 @@
 
 import math
 import numpy as np
-import matplotlib.pyplot as plt
 
 def mean_reverting_asian_fixed_strike(s,x,*,positionFlag="c",
                         time_to_maturity=1,
@@ -50,24 +49,3 @@ def mean_reverting_asian_fixed_strike(s,x,*,positionFlag="c",
         paths.append(path)
 
     return (math.exp(-r*time_to_maturity)/simulations)*sum, paths, range(0,steps)
-
-
-# test
-k, paths, time_steps = mean_reverting_asian_fixed_strike(
-    42,
-    40,
-    positionFlag="c",
-    time_to_maturity=1,
-    steps=250,
-    simulations=100,
-    kappa=0.0001,
-    theta=45,
-    v=2,
-    r=0.1)
-
-
-print("Simulated option price: ",k)
-
-for path in paths:
-    plt.plot(time_steps, path)
-plt.show()
