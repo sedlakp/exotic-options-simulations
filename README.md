@@ -34,5 +34,5 @@ Jako programovací jazyk jsem zvolil Python. Pro psaní kódu používám Atom a
 * Mean reverting O-U simulace (Asijská opce - evropský typ)
 	* Floating strike (Strike je průměr spotových cen, porovnává se s spotovou cenou v čase expirace opce)
 	* Fixed strike (Strike je fixní, porovnává se s průměrem spotových cen)
-* [TODO]
+* Mean reverting O-U simulace (Spread opce - evropský typ)
 * [TODO]
