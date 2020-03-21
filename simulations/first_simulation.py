@@ -39,11 +39,11 @@ def mean_reverting_european(s,x,*,positionFlag="c",
     sum=0.0
     paths = []
     #
-    for i in range(1,simulations):
+    for i in range(1,simulations+1):
         path = []
         st = s
         # simulate path
-        for _ in range(0,steps):
+        for _ in range(1,steps+1):
             # https://math.stackexchange.com/questions/345773/how-the-ornstein-uhlenbeck-process-can-be-considered-as-the-continuous-time-anal
             ds = kappa * (theta-st) * dt + v * math.sqrt(dt) * np.random.normal(0,1)
             st = st + ds
@@ -53,4 +53,4 @@ def mean_reverting_european(s,x,*,positionFlag="c",
         paths.append(path)
 
     # Return present value
-    return (math.exp(-r*time_to_maturity)/simulations)*sum, paths, range(0,steps)
+    return (math.exp(-r*time_to_maturity)/simulations)*sum, paths, range(1,steps+1)
