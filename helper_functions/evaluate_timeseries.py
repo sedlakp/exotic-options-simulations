@@ -22,7 +22,7 @@ def evaluate_ts_data(data):
     """
     # Tests
     jb_score, jb_pvalue, jb_skew, jb_kurtosis = jarque_bera(data)
-    jb_s = pd.DataFrame({'Score': [jb_score], 'p value': [jb_pvalue]})
+    jb_s = pd.DataFrame({'Score': [jb_score], 'p value': [jb_pvalue], "skew": [jb_skew], "kurtosis":[jb_kurtosis]})
     print("\nJarque Bera test (tests for normality of data)")
     print(jb_s)
 
