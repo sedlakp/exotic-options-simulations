@@ -1,4 +1,6 @@
 
+import pandas as pd
+import matplotlib.pyplot as plt
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
 from statsmodels.graphics.gofplots import qqplot
 from statsmodels.stats.diagnostic import acorr_ljungbox
@@ -19,12 +21,12 @@ def evaluate_ts_data(data):
 
     """
     # Tests
-    jb_score, jb_pvalue, jb_skew, jb_kurtosis = jarque_bera(rets1)
+    jb_score, jb_pvalue, jb_skew, jb_kurtosis = jarque_bera(data)
     jb_s = pd.DataFrame({'Score': [jb_score], 'p value': [jb_pvalue]})
     print("\nJarque Bera test (tests for normality of data)")
     print(jb_s)
 
-    lb_result = acorr_ljungbox(rets1, lags=[30], boxpierce=False, return_df=True)
+    lb_result = acorr_ljungbox(data, lags=[30], boxpierce=False, return_df=True)
     print("\nLjung-Box test ( tests autocorrelation)")
     print(lb_result)
 
