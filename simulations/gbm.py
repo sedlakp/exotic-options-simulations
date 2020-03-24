@@ -14,8 +14,8 @@ def asian_gbm_fixed(
             time_to_maturity=1,
             steps,
             simulations,
-            drift_strength,
-            v,
+            drift_strength, # has to be daily (calculated from daily changes)
+            v, # assumed to be daily
             r):
     dt = time_to_maturity/steps
     position = owner_position(position_flag)
@@ -27,10 +27,12 @@ def asian_gbm_fixed(
     step_range = range(1,steps+1)
 
     for i in sim_range:
-        path = []
+        path = [s]
         st = s
         for _ in step_range:
-            ds = st * (drift_strength * dt + v * np.sqrt(dt) * np.random.normal(0,1))
+            #inputted standard deviation and drift strength are calculated from daily! evaluates
+            # dt is for these then 1, so no adjustment isnt neccessary
+            ds = st * (drift_strength + v * np.random.normal(0,1))
             st = st + ds
             path.append(st)
         avg_spot = np.average(path)
@@ -39,7 +41,7 @@ def asian_gbm_fixed(
         sum = sum + payoff
         paths.append(path)
 
-    return (np.exp(-r*time_to_maturity)/simulations)*sum, paths, step_range
+    return (np.exp(-r*time_to_maturity)/simulations)*sum, paths, range(0,steps+1)
 
 def asian_gbm_floating():
     pass
