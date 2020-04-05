@@ -146,3 +146,98 @@ def asian_gbm_laplace(
         paths.append(path)
 
     return (np.exp(-discount_rate*maturity)/simulations)*sum, paths, range(0,steps+1)
+
+
+def prepare_data(data):
+    if not isinstance(data, pd.DataFrame):
+        raise ValueError("The input should be timeseries in pandas DataFrame")
+    data = data.squeeze()
+    data = data.asfreq(BDay())
+    data = data.fillna(method='ffill').dropna()
+    return data
+
+def change_to_logrets(data):
+    rets = (data/data.shift(1))
+    rets = rets.dropna()
+    lrets = np.log(rets)
+    return lrets
+
+def calendar_spread_gbm(
+            data,*,
+            strike,
+            position_flag,
+            maturity=1,
+            steps,
+            simulations,
+            discount_rate,
+            history_length=None,
+            ):
+    """
+    Function to simulate paths and calculate option price of a calendar spread option
+
+    data should be a dataframe with two columns that contain historical data
+    """
+
+    data1 = prepare_data(data)
+   # data2 = prepare_data(data2)
+
+    initial_price1 = data1.iloc[-1,0]
+    initial_price2 = data1.iloc[-1,1]
+   # initial_price2 = data2[-1]
+
+    if history_length == None:
+        history_data1 = data1
+       # history_data2 = data2
+    else:
+        history_data1 = data1[-history_length:]
+       # history_data2 = data2[-history_length:]
+
+    lrets = change_to_logrets(history_data1)
+    # fit normal distribution, scale is std
+    loc_d1, scale_d1 = sps.norm.fit(lrets[lrets.columns[0]])
+    print(loc_d1, "//1//",scale_d1)
+
+    loc_d2, scale_d2 = sps.norm.fit(lrets[lrets.columns[1]])
+    print(loc_d2, "//2//",scale_d2)
+
+    cor = np.corrcoef(logs[logs.columns[0]],logs[logs.columns[1]])[1,0]
+    print(f"corr coef: {cor}")
+
+    sum = 0.0
+    paths1 = []
+    paths2 = []
+
+    sim_range = range(1,simulations+1)
+    step_range = range(1,steps+1)
+
+    for _ in sim_range:
+        path1 = [initial_price1]
+        path2 = [initial_price2]
+        st1 = initial_price1
+        st2 = initial_price2
+        for _ in step_range:
+            # GMB model with normal distribution
+            noise1 = sps.norm.rvs(loc=0,scale=1)
+            ds1 = st1 * (loc_d1 + scale_d1 * noise1)
+            st1 = st1 + ds1
+            path1.append(st1)
+
+            noise2 = ( cor * noise1 ) + ( sps.norm.rvs(loc=0,scale=1) * np.sqrt(1-cor**2) )
+            ds2 = st2 * (loc_d2 + scale_d2 * noise2)
+            st2 = st2 + ds2
+            path2.append(st2)
+
+        # option payoff calculation
+        # https://www.cmegroup.com/content/dam/cmegroup/rulebook/NYMEX/3/397.pdf
+        if position_flag == "c":
+            payoff = max(((st1-st2) - strike), 0)
+        elif position_flag == "p":
+            payoff = max((strike - (st2-st1)), 0)
+        else:
+            raise ValueException("Position can be either 'p' for put or 'c' for call")
+
+        sum = sum + payoff
+        paths1.append(path1)
+        paths2.append(path2)
+    print(sum)
+    return (np.exp(-discount_rate*maturity)/simulations)*sum, [paths1,paths2], range(0,steps+1)
