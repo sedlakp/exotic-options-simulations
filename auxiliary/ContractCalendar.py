@@ -20,6 +20,11 @@ class ContractCalendar:
         result = requests.get(self.url, headers=header)
         raw_data = pd.read_excel(result.content, sheet_name=0, header=4)
         raw_data = raw_data.iloc[:,:5]
+
+        # change appropriate columns to datetime for easier handling
+        for colname in raw_data.columns[2:]:
+            raw_data[colname] = pd.to_datetime(raw_data.loc[:,colname])
+
         return raw_data
 
     @classmethod
