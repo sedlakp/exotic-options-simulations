@@ -232,12 +232,11 @@ def calendar_spread_gbm(
         if position_flag == "c":
             payoff = max(((st1-st2) - strike), 0)
         elif position_flag == "p":
-            payoff = max((strike - (st2-st1)), 0)
+            payoff = max((strike - (st1-st2)), 0)
         else:
             raise ValueException("Position can be either 'p' for put or 'c' for call")
 
         sum = sum + payoff
         paths1.append(path1)
         paths2.append(path2)
-    print(sum)
     return (np.exp(-discount_rate*maturity)/simulations)*sum, [paths1,paths2], range(0,steps+1)
