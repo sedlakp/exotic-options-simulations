@@ -1,5 +1,6 @@
 import requests
 import pandas as pd
+from datetime import datetime as dt
 
 class ContractCalendar:
     """
@@ -26,6 +27,13 @@ class ContractCalendar:
             raw_data[colname] = pd.to_datetime(raw_data.loc[:,colname])
 
         return raw_data
+
+    @staticmethod
+    def get_business_days(*,start=None,end):
+        if start == None:
+            start = dt.now()
+
+            return pd.bdate_range(start=start,end=end)
 
     @classmethod
     def wti_average_option(cls):
