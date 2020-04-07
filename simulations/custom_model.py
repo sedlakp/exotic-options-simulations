@@ -12,7 +12,7 @@ def owner_position(flag: str) -> int:
         raise ValueError(f"Position can be either p or c, not {positionFlag}")
 
 
-def asian_custom_mean_reverting_laplace(data,*,strike,position_flag="c",maturity=1,steps,simulations, discount_rate,history_length=None,reversion_rate):
+def asian_custom_mean_reverting_laplace(data,*,strike,position_flag="c",maturity=1,steps,simulations, discount_rate,history_length=None,reversion_rate,mean):
     """
     Model is based on OU process
 
@@ -55,7 +55,7 @@ def asian_custom_mean_reverting_laplace(data,*,strike,position_flag="c",maturity
     else:
         history_data = data[-history_length:]
 
-    mean_data = history_data.mean()
+    mean_data = mean#history_data.mean()
    # print(f"mean: {mean_data}")
 
     rets = (history_data/history_data.shift(1))
@@ -63,7 +63,7 @@ def asian_custom_mean_reverting_laplace(data,*,strike,position_flag="c",maturity
     lrets = np.log(rets)
     loc_d, scale_d = sps.laplace.fit(lrets)
     position = owner_position(position_flag)
-
+    print("scale: ",scale_d)
     sum = 0.0
     paths = []
 
