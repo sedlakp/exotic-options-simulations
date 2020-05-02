@@ -17,7 +17,7 @@ Zaměřuji se na opce dostupné na NYMEX. Opce, které se na NYMEX obchodují js
 
 Ve výpočtech používám datasety z [Yahoo Finance](https://finance.yahoo.com/quote/CL%3DF/futures?p=CL%3DF) (.csv soubory v tomto repu).
 
-Jako programovací jazyk jsem zvolil Python. Pro psaní kódu používám Atom a Jupyter Notebook.
+Jako programovací jazyk jsem zvolil Python (3.7.4). Pro psaní kódu používám Atom a Jupyter Notebook. V [requirements.txt](requirements.txt) jsou použité knihovny kromě knihoven potřebných pro Jupyter Notebook.
 
 
 ### Vybrané exotické opce  
