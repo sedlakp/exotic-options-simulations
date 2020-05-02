@@ -169,3 +169,92 @@ def spread_simulation_gbm_final(*,position_flag,initial_price1,
         paths2.append(path2)
     # vrácení hodnot z funkce po provedení všech simulací
     return total, [paths1,paths2]
+
+
+
+import numpy as np
+import scipy.stats as sps
+from simulations.toolbox import owner_position
+
+def asian_simulation_mean_reverting_final(*,position_flag,initial_price,
+                        strike, simulations, steps, avg_steps,
+                        avg_values=[], group=(), mean_value,reversion_speed,
+                        strike_type="fixed"):
+    """
+        Returns total payoff from all simulations and simulated paths
+
+        group requires tuple (loc,scale,distribution) or (loc,scale,df,distribution)
+        broder price decides which group is used for generating values
+    """
+
+    non_avg_steps = steps - avg_steps
+
+    if non_avg_steps < 0:
+        if -non_avg_steps != len(avg_values):
+            raise ValueError(f"avg_values count ({len(avg_values)}) must be equal to {-non_avg_steps}")
+
+    total = 0.0
+    paths = []
+    payoffs = []
+
+    position = owner_position(position_flag)
+
+    sim_range = range(1,simulations+1)
+    step_range = range(1,steps+1)
+
+    distribution = group[-1]
+    loc = group[0]
+    scale = group[1]
+    if distribution == "t":
+        df = group[2]
+
+
+    for _ in sim_range:
+        path = [initial_price]
+        st = initial_price
+        #print("\n New simulation path")
+        for _ in step_range:
+
+            if distribution == "n":
+                #ds = st * sps.norm.rvs(loc=loc,scale=scale)
+                ds = reversion_speed * (mean_value-st) +
+                            sps.norm.rvs(loc=loc,scale=scale)
+            elif distribution == "c":
+                ds = reversion_speed * (mean_value-st) +
+                            sps.cauchy.rvs(loc=loc,scale=scale)
+            elif distribution == "l":
+                ds = reversion_speed * (mean_value-st) +
+                            sps.laplace.rvs(loc=loc,scale=scale)
+            elif distribution == "t":
+                if df == None:
+                    raise ValueError("Degrees of freedom (df) parameter has to be specified")
+                ds = reversion_speed * (mean_value-st) +
+                            sps.t.rvs(df,loc=loc,scale=scale)
+            else:
+                raise ValueError("Distribution parameter must be: 'n'(normal - default) or 'c'(cauchy) or 'l'(laplace) or 't'(student's t)")
+            st = st + ds
+            path.append(st)
+
+        # dont use values for averaging if they are from previous month
+        if non_avg_steps>0:
+            avg_spot = np.average(path[non_avg_steps+1:])
+            #print(f"AVERAGING: count({len(path[non_avg_steps+1:])})")
+        else:
+            if len(avg_values) == -non_avg_steps:
+                # add already known values
+                averaging_arr = [*avg_values, *path[1:]]
+                avg_spot = np.average(averaging_arr)
+            else:
+                raise ValueError(f"Number of already known values for average ({len(avg_values)}) does not match expected number ({-non_avg_steps})")
+
+        # option payoff calculation
+        if strike_type == "fixed":
+            payoff = max(position * (avg_spot-strike),0)
+        elif strike_type == "floating":
+            payoff = max(position * (st-avg_spot),0)
+        else:
+            raise Exception("Strike type can be either 'fixed' or 'floating'")
+        total = total + payoff
+        payoffs.append(payoff)
+        paths.append(path)
+    return total, paths, payoffs
