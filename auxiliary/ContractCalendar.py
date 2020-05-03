@@ -20,7 +20,9 @@ class ContractCalendar:
         }
 
         result = requests.get(self.url, headers=header)
-        raw_data = pd.read_excel(result.content, sheet_name=0, header=4)
+        BytesIO = pd.io.common.BytesIO
+
+        raw_data = pd.read_excel(BytesIO(result.content), sheet_name=0, header=4, engine='xlrd')
         raw_data = raw_data.iloc[:,:5]
 
         # change appropriate columns to datetime for easier handling
