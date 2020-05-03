@@ -198,11 +198,6 @@ def spread_simulation_gbm_final(*,position_flag,initial_price1, initial_price2,
 #
 #
 
-from simulations.toolbox import owner_position
-import numpy as np
-import pandas as pd
-import scipy.stats as sps
-
 def asian_simulation_mean_reverting_final(*,position_flag,initial_price, strike, simulations, steps,
                                 avg_steps , avg_values=[], group=(), mean_value,reversion_speed, strike_type="fixed"):
     """
