@@ -15,8 +15,8 @@ from simulations.toolbox import owner_position
 #
 
 def asian_simulation_gbm_final(*,position_flag,initial_price, strike,
-    simulations, steps, avg_steps , avg_values=[], group1=(), group2=(),
-    border_price, strike_type="fixed"):
+    simulations, steps, avg_steps , avg_values=[], group1, group2=(),
+    border_price=np.inf, strike_type="fixed"):
     """
         Funkce vrátí celkový součet zisků ze všech simulací
         + všechny nasimulované cesty ve formě array
@@ -32,8 +32,17 @@ def asian_simulation_gbm_final(*,position_flag,initial_price, strike,
         * avg_values - už známé hodnoty průměrovacího období
         * group - vyžaduje tuple ve tvaru
                 (loc,scale,distribution) nebo (loc,scale,df,distribution)
+                Z určených rozdělení se generují hodnoty. Pokud je současná
+                hodnota menší než border_price, používá se group1. V opačném
+                případě se používá group2.
+
         * border_price - cenová mez rozdělující obě skupiny
         * strike_type - "floating" nebo "fixed"
+
+        Funkci lze použít, i když se nepředpokládá změna parametrů pro
+        generování hodnot při překročení cenové hranice (border_price).
+        V takovém případě stačí poskytnout údaje pro group1 (border_price
+        má výchozí hodnotu nekonečno, group2 se tedy nikdy nepoužije).
     """
     # výpočet počtu kroků, které nepatří do průměrovacího období
     non_avg_steps = steps - avg_steps
