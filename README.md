@@ -26,8 +26,8 @@ Jako programovací jazyk jsem zvolil Python (3.7.4). Pro psaní kódu používá
 * Spread opce
 
 ### Použité datasety
-* Crude Oil Jul 20
-* Crude Oil Aug 20
+* [Crude Oil Jul 20](datasets/CLN20.NYM.csv)
+* [Crude Oil Aug 20](datasets/CLQ20.NYM.csv)
 * (Pro jeden graf i Crude Oil May 20 a Crude Oil June 20)
 
 ### Seznam výpočtů
