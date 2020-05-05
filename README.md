@@ -30,9 +30,12 @@ Jako programovací jazyk jsem zvolil Python (3.7.4). Pro psaní kódu používá
 * Crude Oil Aug 20
 * (Pro jeden graf i Crude Oil May 20 a Crude Oil June 20)
 
-### Seznam simulací
+### Seznam výpočtů
 
 * Asijská opce (fixed strike) - model na základě GBM [[Výpočet]](vypocty_diplomova_prace_asian_gbm.ipynb)
 * Calendar spread opce - model na základě GBM [[Výpočet]](vypocty_diplomova_prace_calendar_gbm.ipynb)
 * Asijská opce (fixed strike) - mean reverting model [[Výpočet]](vypocty_diplomova_prace_mean_reverting_regression.ipynb) [[Výpočet2]](vypocty_diplomova_prace_mean_reverting_regression_bonus.ipynb) 
 
+### Simulační funkce
+
+Simulační funkce použité ve výpočtech jsou dostupné [zde](simulations/simulations.py).
