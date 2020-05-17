@@ -37,6 +37,7 @@ Jako programovací jazyk jsem zvolil Python (3.7.4). Pro psaní kódu používá
 	* [[Výpočet s kratší dobou do expirace]](vypocty_asian_gbm_novejsi_data.ipynb)
 * Calendar spread opce - model na základě GBM 
 	* [[Výpočet]](vypocty_diplomova_prace_calendar_gbm.ipynb)
+	* [[Výpočet s kratší dobou do expirace]](vypocty_calendar_gbm_novejsi_data.ipynb)
 * Asijská opce (fixed strike) - mean reverting model 
 	* [[Výpočet]](vypocty_diplomova_prace_mean_reverting_regression.ipynb) 
 	* [[Výpočet2]](vypocty_diplomova_prace_mean_reverting_regression_bonus.ipynb) 
